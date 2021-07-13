@@ -4,42 +4,36 @@ using UnityEngine;
 
 public class asteroidCntroller : MonoBehaviour
 {
-    Rigidbody physics;
-    public float rotateSpeed;
-    public float asteroidSpeed;
+    Rigidbody rb;
+    public float rotateSpeed;   // Dönme hýzý
+    public float asteroidSpeed; // Asteroid hýzý
 
-    public GameObject explosion;
-    public GameObject palyerExplosion;
-
-    GameObject GameController;
-    gameController controllerCode;
+    public GameObject explosion;    // Asteroid patlama efekti
+    public GameObject palyerExplosion;  // Player patlama efekti
     void Start()
     {
-        physics = GetComponent<Rigidbody>();
-        physics.angularVelocity = Random.insideUnitSphere*rotateSpeed;  // Obje random þekilde döner
-        physics.velocity = transform.forward * -asteroidSpeed;   // Nesne ileri hareket eder
-
-        GameController = GameObject.FindGameObjectWithTag("GameController");
-        controllerCode = GameController.GetComponent<gameController>();
+        rb = GetComponent<Rigidbody>();
+        rb.angularVelocity = Random.insideUnitSphere*rotateSpeed;  // Nesne random þekilde döner
+        rb.velocity = transform.forward * -asteroidSpeed;   // Nesne geriye doðru hareket eder
     }
 
     void OnTriggerEnter(Collider other)
     {
-        if(other.tag== "Lightning") 
-        {            
-            Destroy(gameObject);    // Kodun baðlý olduðu objeyi yok eder - Asteroid'i yok eder
-            Instantiate(explosion, transform.position, transform.rotation); // Eðer çarpýlan nesne Asteroid ise patlama efekti oluþtur
-            controllerCode.scoreIcreases(10);
+        if(other.tag== "Lightning")
+        {   // Temas edilen nesnenin tagý "Lightning" ise          
+            Destroy(gameObject);    // Scriptin baðlý olduðu nesneyi yok eder - Asteroid'i yok eder
+            Instantiate(explosion, transform.position, transform.rotation); // Asteroid patlama efekti oluþtur
+            gameController.instance.scoreIcreases(10);  // Her asteroid vurulmasýnda Score 10 puan artar
         }
         if (other.tag == "Player")
-        {            
-            Destroy(other.gameObject);    // Kodun baðlý olduðu objeye çarpan objeleri yok eder - Player'ý yok eder   
-            Instantiate(palyerExplosion, other.transform.position, other.transform.rotation);   // Eðer çarpýlan nesne Player ise patlama efekti oluþtur
-            controllerCode.gameOver();  // Oyun bitti fonk. çalýþýr
+        {   // Temas edilen nesnenin tagý "Player" ise          
+            Destroy(other.gameObject);    // Scriptin baðlý olduðu nesneye temas eden nesneyi yok eder - Player'ý yok eder   
+            Instantiate(palyerExplosion, other.transform.position, other.transform.rotation);   // Player patlama efekti oluþtur
+            gameController.instance.gameOver();  // "gameController" üzerinden "gameOver" fonksiyonu çalýþýr
         }
         if (other.tag == "Asteroid")
-        { 
-            Destroy(gameObject);    // Kodun baðlý olduðu objeyi yok eder - Harita dýþýna çýkan Asteroid'i yok eder
+        {   // Temas edilen nesnenin tagý "Asteroid" ise  
+            Destroy(gameObject);    // Kodun baðlý olduðu nesneyi yok eder - Harita dýþýna çýkan Asteroid'i yok eder
             
         }
     }

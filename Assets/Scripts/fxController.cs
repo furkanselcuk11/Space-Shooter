@@ -4,19 +4,19 @@ using UnityEngine;
 
 public class fxController : MonoBehaviour
 {
-    Rigidbody physics;
-    public float fxSpeed;
+    Rigidbody rb;
+    public float fxSpeed;   // Kurþunlarýn hýzý
     void Start()
     {
-        physics = GetComponent<Rigidbody>();
-        physics.velocity = transform.forward*fxSpeed;   // Nesne ileri hareket eder
+        rb = GetComponent<Rigidbody>();
+        rb.velocity = transform.forward*fxSpeed;   // Kurþun nesnesi ileri hareket eder
     }
 
     void OnTriggerEnter(Collider other)
     {
         if (other.tag == "LeadBorder")
-        {    // Kurþunlar eðer LeadBorder temas ederse yok et  
-            Destroy(gameObject);    // Kodun baðlý olduðu objeye çarpan objeleri yok eder
+        {    // Kurþunlar eðer "LeadBorder"a temas ederse yok et  
+            Destroy(gameObject);    // Scriptin baðlý olduðu nesne "LeadBorder"a temas ederse yok et 
         }
     }
 
